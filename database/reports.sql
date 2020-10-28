@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2020 at 07:03 PM
+-- Generation Time: Oct 28, 2020 at 11:36 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `reports` (
+  `fake_id` int(200) NOT NULL,
   `fit_id` varchar(200) NOT NULL,
   `report_name` text NOT NULL,
   `report_date` date NOT NULL,
@@ -45,7 +46,17 @@ CREATE TABLE `reports` (
 -- Indexes for table `reports`
 --
 ALTER TABLE `reports`
-  ADD PRIMARY KEY (`fit_id`);
+  ADD PRIMARY KEY (`fake_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `fake_id` int(200) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
