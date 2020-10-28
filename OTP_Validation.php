@@ -1,3 +1,16 @@
+<?php
+include('connection/db.php');
+  session_start();
+  if($_SESSION['superhero']==true && $_SESSION['fitid']==true){
+    $otp = $_SESSION['superhero'];
+    $fit_id = $_SESSION['fitid'];
+	
+
+  }else{
+    header('location:index.php');
+  }
+   
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,18 +43,17 @@
 
         <form method="post">
             <div class="form-group">
-                <label for="exampleInputEmail1">Fit Card ID</label>
-                <input type="text" class="form-control" name="card_id"  placeholder="Enter 8 digit Fit Card ID here" required>
+                <label for="otp">Enter OTP</label>
+                <input type="text"  class="form-control" name="otp"  placeholder="Enter 4 digit OTP here" required>
             </div>
            
           <div data-aos="fade-up" data-aos-delay="800">
-            <input  class="btn-get-started scrollto" id="submit"  name="submit" type="submit" > or	
-            <a href=""  class="btn-get-started scrollto">Scan Fit Card</a>
+            <input  class="btn-get-started scrollto" id="submit"  name="submit" type="submit" >
           </div>
         </form> 
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-          <img src="assets/img/jodi.png" class="img-fluid animated" alt="">
+          <img src="assets/img/lock.png" class="img-fluid animated" alt="">
         </div>
       </div>
     </div>
@@ -65,24 +77,22 @@
 
 include('connection/db.php');
 if(isset($_POST['submit'])) {
-  $card_id = $_POST['card_id'];
+  $otp_entered = $_POST['otp'];
   
-  $query = mysqli_query($conn, "select * from fit_card_request where fit_id=$card_id");
-  if($query){
-  if(mysqli_num_rows($query)>0){
-    echo "<script>window.location.href  = 'send_otp.php?fcid=$card_id';</script>";
-
-
-  } else {
-    echo "<script>alert('Invalid Fit Card ID, please try again!')</script>";
+  if($otp_entered == $otp)
+  {
+      $_SESSION['report_passport'] = $fit_id;
+      header("location:fit_card.php");
+  }else{
+     
+      echo "<script>alert('Invalid OTP Code!, Please try again.')</script>";
+      echo "<script>window.location = 'fit_card_login.php'</script>";
   }
 
 }
-}
-
-?>
-
-
 
 
 ?>
+
+
+

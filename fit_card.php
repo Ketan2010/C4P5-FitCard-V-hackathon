@@ -1,3 +1,25 @@
+<?php
+include('connection/db.php');
+  session_start();
+  if($_SESSION['report_passport']==true){
+    $fit_id = $_SESSION['report_passport'];
+  }else{
+    header('location:fit_card_login.php');
+  }
+?>
+<?php
+include('connection/db.php');
+$query =  mysqli_query($conn,"select * from  fit_card_request where fit_id= '$fit_id'");
+
+
+while($row= mysqli_fetch_array($query)) {
+  $name = $row['name'];
+  $email = $row['email'];
+  $contact = $row['contact'];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,6 +63,7 @@
           <h2>Fit Card</h2>
           <div data-aos="fade-up" data-aos-delay="800">
             <a href="upload_reports.php" class="btn-get-started scrollto">Upload Reports</a>
+            <a href="log_out.php" class="btn-get-started scrollto">Log Out</a>
           </div>
         </div>
         
@@ -51,12 +74,11 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        
-                        <h4 class="card-text"><b>Name:</b> Joan William</h4>
-                        <h4 class="card-text"><b>Email:</b> jaon@fitcard.com</h4>
-                        <h4 class="card-text"><b>Contact:</b> 5544321675</h4>
-
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        <p class="h4"><b>Fit Card ID:</b> <?php echo $fit_id?></p>
+                        <p class="h4"><b>Name:</b> <?php echo $name?></p>
+                        <p class="h4"><b>Email:</b> <?php echo $email?></p>
+                        <p class="h4"><b>Contact:</b> <?php echo $contact?></p>
+                        <p class="h5"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
             </div>
@@ -108,30 +130,26 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <?php  
+			            $no='1';
+                        $query_report = mysqli_query($conn,"select * from reports where fit_id='$fit_id' ORDER BY report_date DESC");
+			
+			            while($row1 = mysqli_fetch_array($query_report)) {
+                    ?>  
                         <tr>
-                            <td>1</td>
-                            <td>Blood Report</td>
-                            <td>20/12/2020</td>
-                            <td>Dr. Joan</td>
-                            <td>Normal</td>
+                            <td><?php echo $no ?></td>
+                            <td><?php echo $row1['report_name']?></td>
+                            <td><?php $dt= date_create($row1['report_date']); echo date_format($dt,'d/m/Y'); ?></td>
+                            <td><?php echo $row1['uploaded_by']?></td>
+                            <td><?php echo $row1['report_description']?></td>
                             <td>
-                                <button  class="btn btn-primary">
+                                <a target="_blank" href="<?php echo '../upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
                                     <i data-feather="eye"></i> View
                                 </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>X-Ray</td>
-                            <td>12/10/2020</td>
-                            <td>Manual Labs</td>
-                            <td>Left leg x-ray</td>
-                            <td>
-                                <button  class="btn btn-primary">
-                                    <i data-feather="eye"></i> View
-                                </button>
-                            </td>
-                        </tr>
+                        <?php $no=$no+1;  } ?>
+                       
                     </tbody>
                     <tfoot>
                         <tr>

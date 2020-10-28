@@ -1,3 +1,13 @@
+<?php
+include('connection/db.php');
+  session_start();
+  if($_SESSION['report_passport']==true){
+    $fit_id = $_SESSION['report_passport'];
+  }else{
+    header('location:fit_card_login.php');
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
