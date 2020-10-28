@@ -1,3 +1,58 @@
+<?php
+session_start();
+include('./connection/db.php');
+
+if(isset($_POST['submit'])) {
+  $mail = $_POST['mail'];
+  $name = $_POST['name'];
+  $contact = $_POST['contact'];
+  $address = $_POST['address'];
+  
+  $card_no = $_POST['card_no'];
+  $exp = $_POST['exp'];
+  $cvv = $_POST['cvv'];
+  $card_name = $_POST['card_name'];
+  $rs = $_POST['rs'];
+  $status='done';
+  
+ 
+  $profile=mysqli_query($conn,"insert into fit_card_request (name,email,contact,address) values ('$name','$mail','$contact','$address' )");
+  $payment=mysqli_query($conn,"insert into payment (card_no,payment_rs ,status ,payment_date) values ('$card_no','$rs','$status',CURDATE())");
+  $_SESSION['email'] = $mail;
+  $id=mysqli_query($conn,"select * from fit_card_request where email='$_SESSION[email]'");
+  $query=mysqli_fetch_array($id);
+  $display='Registration successful !!! Thanks for registration , you will get your fit card soon .Till then you can use ' .  $query['fit_id'] .' as your fit card id.' ;
+
+  
+  if(!empty($profile) and !empty($payment)){
+         
+		 echo "<script>alert( ' $display' )</script>";
+		 
+		 
+
+       
+    } else {
+      echo "<script>alert('Something went wrong, please register again!')</script>";
+    }
+}
+ else {
+ 
+      echo "<script>alert('Please try again!')</script>";
+    }
+
+
+  
+
+
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,7 +143,8 @@
                         <div class="form-group">
                             <input type="text" value="Rs. 2000" class="form-control" id="address" name="rs" readonly>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <!--<button type="submit" class="btn btn-primary">Submit</button>-->
+						<input class="bigb" id="submit" value="Register" name="submit" type="submit" >
 
                     </form> 
                 
