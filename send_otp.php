@@ -42,17 +42,19 @@ if(isset($_GET["fcid"])){
       require("PHPMailer/src/Exception.php");
         
       $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-$mail->setFrom('admin@example.com');
-$mail->addAddress($pat_mail);
-$mail->Subject = 'Fit Card Verification Code';
-$mail->Body = 'Hello,'.$name.' Your Fit Card verification code is :'.$otp;
-$mail->IsSMTP();
-$mail->SMTPSecure = 'ssl';
-$mail->Host = 'ssl://smtp.gmail.com';
-$mail->SMTPAuth = true;
-$mail->Port = 465;
-$mail->Username = 'medtechsolutions.vit@gmail.com';
-$mail->Password = 'medtech@1234';
+        $mail->setFrom('admin@example.com');
+        $mail->addAddress($pat_mail);
+        $mail->Subject = 'Fit Card Verification Code';
+        $mail->Body = 'Hello,'.$name.' Your Fit Card verification code is :'.$otp;
+        $mail->IsSMTP();
+        $mail->SMTPSecure = 'ssl';
+        $mail->Host = 'ssl://smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Port = 465;
+        $mail->Username = 'medtechsolutions.vit@gmail.com';
+        $mail->Password = 'medtech@1234';
+
+
     if($json['status']=="success" or $mail->send())
     {
         $_SESSION['superhero'] = $otp;

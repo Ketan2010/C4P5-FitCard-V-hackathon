@@ -1,12 +1,14 @@
 <?php
 session_start();
-include('./connection/db.php');
+include('connection/db.php');
 
 if(isset($_POST['submit'])) {
   $mail = $_POST['mail'];
   $name = $_POST['name'];
   $contact = $_POST['contact'];
   $address = $_POST['address'];
+  $pass = $_POST['pass'];
+  $conf_pass = $_POST['conf_pass'];
   
   $card_no = $_POST['card_no'];
   $exp = $_POST['exp'];
@@ -15,30 +17,32 @@ if(isset($_POST['submit'])) {
   $rs = $_POST['rs'];
   $status='done';
   
+  if($pass == $conf_pass){
+    $profile=mysqli_query($conn,"insert into fit_card_request (name,email,contact,address,pass) values ('$name','$mail','$contact','$address','$pass' )");
+    $fit_id = $conn->insert_id;
+    $payment=mysqli_query($conn,"insert into payment (fit_id,card_no,payment_rs ,status ,payment_date) values ('$fit_id','$card_no','$rs','$status',CURDATE())");
+    
+    $display='Registration successful !!! Thanks for registration , you will get your fit card soon .Till then you can use ' .  $fit_id .' as your fit card id.' ;
+    }else{
+      echo "<script>alert('Password and confirm password are not matching!')</script>";
+    }
+  
  
-  $profile=mysqli_query($conn,"insert into fit_card_request (name,email,contact,address) values ('$name','$mail','$contact','$address' )");
-  $payment=mysqli_query($conn,"insert into payment (card_no,payment_rs ,status ,payment_date) values ('$card_no','$rs','$status',CURDATE())");
-  $_SESSION['email'] = $mail;
-  $id=mysqli_query($conn,"select * from fit_card_request where email='$_SESSION[email]'");
-  $query=mysqli_fetch_array($id);
-  $display='Registration successful !!! Thanks for registration , you will get your fit card soon .Till then you can use ' .  $query['fit_id'] .' as your fit card id.' ;
-
+  
   
   if(!empty($profile) and !empty($payment)){
          
-		 echo "<script>alert( ' $display' )</script>";
-		 
-		 
-
-       
+     echo "<script>alert( ' $display' )</script>";
+     $_SESSION['fit_pat_own'] = $fit_id;
+     $_SESSION['start_own'] = time();
+      // Ending a session in 5 minutes from the starting time.
+      $_SESSION['expire_own'] = $_SESSION['start_own'] + (30 * 60);
+      header("location:fit_card_owner.php?i=1");
     } else {
       echo "<script>alert('Something went wrong, please register again!')</script>";
     }
 }
- else {
  
-      echo "<script>alert('Please try again!')</script>";
-    }
 
 
   
@@ -81,7 +85,7 @@ if(isset($_POST['submit'])) {
       <div class="row">
         <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
           <h1 style="font-size:20px" data-aos="fade-up">Register here to get your Fit Card</h1>
-         
+
 
 
 
@@ -112,10 +116,20 @@ if(isset($_POST['submit'])) {
                         </div>
                         
                         <div class="form-group">
-                            <label for="address">Address</label>
                             <input type="text" class="form-control" id="address" name="address" placeholder="Your Address" required>
                             <small id="emailHelp" class="form-text text-muted">you will get Fit Card on this address.</small>
                         </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                <input type="password" class="form-control" name="pass" placeholder="Password" required>
+                                </div>
+                                <div class="col">
+                                <input type="password" class="form-control" name="conf_pass" placeholder="Confirm password" required>
+                                </div>
+                            </div>
+                        </div>
+                        
 
                     
                 
@@ -141,16 +155,19 @@ if(isset($_POST['submit'])) {
                             <small id="emailHelp" class="form-text text-muted"></small>
                         </div>
                         <div class="form-group">
-                            <input type="text" value="Rs. 2000" class="form-control" id="address" name="rs" readonly>
+                            <input type="text" value="Rs. 500" class="form-control" id="address" name="rs" readonly>
                         </div>
                         <!--<button type="submit" class="btn btn-primary">Submit</button>-->
-						<input class="bigb" id="submit" value="Register" name="submit" type="submit" >
+						            <input  class="btn-get-started scrollto"  id="submit" value="Register" name="submit" type="submit" >
 
                     </form> 
                 
                 </div>
                 </div>
             </div>
+            <h1 style="font-size:15px" >Already Registered? <a href="card_owner_login.php">Login Here</a></h1>
+            
+
         </div>
 
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2020 at 11:36 AM
+-- Generation Time: Oct 29, 2020 at 04:30 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -35,7 +35,9 @@ CREATE TABLE `reports` (
   `uploaded_by` text NOT NULL,
   `report_description` text NOT NULL,
   `report_file` text NOT NULL,
-  `time` timestamp NOT NULL DEFAULT current_timestamp()
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `report_categry` text NOT NULL,
+  `visible` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

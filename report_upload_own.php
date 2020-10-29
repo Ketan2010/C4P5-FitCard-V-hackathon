@@ -1,16 +1,25 @@
 <?php
 include('connection/db.php');
   session_start();
-  if($_SESSION['report_passport']==true){
-    $fit_id = $_SESSION['report_passport'];
+  if($_SESSION['fit_pat_own']==true){
+    $fit_id = $_SESSION['fit_pat_own'];
     $now = time(); // Checking the time now when home page starts.
 
-        if ($now > $_SESSION['expire']) {
-            header('location:log_out.php?i=21');
+        if ($now > $_SESSION['expire_own']) {
+            header('location:log_out.php?i=11');
         }
   }else{
-    header('location:fit_card_login.php');
+    header('location:card_owner_login.php');
   }
+?>
+<?php
+include('connection/db.php');
+
+$query =  mysqli_query($conn,"select * from  fit_card_request where fit_id= '$fit_id'");
+while($row= mysqli_fetch_array($query)) {
+  $name = $row['name'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +62,7 @@ include('connection/db.php');
         <div class="section-title" data-aos="fade-up">
           <h2>Upload Report</h2>
           <div data-aos="fade-up" data-aos-delay="800">
-            <a href="fit_card.php" class="btn-get-started scrollto">Go back to Fit Card</a>
+            <a href="fit_card_owner.php" class="btn-get-started scrollto">Go back to Fit Card</a>
           </div>
         </div>
         
@@ -99,7 +108,7 @@ include('connection/db.php');
                             </div>
                             <div class="col">
                                 <label for="uploaded_by">Your Name</label>
-                                <input type="text" class="form-control" name="uploaded_by" id="uploaded_by" placeholder="your name" required>    
+                                <input type="text" value="<?php echo $name?>" class="form-control" name="uploaded_by" id="uploaded_by" placeholder="your name" required readonly>    
                             </div>    
                         </div>
                         <div class="form-group">

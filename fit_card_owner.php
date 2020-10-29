@@ -1,16 +1,15 @@
 <?php
 include('connection/db.php');
   session_start();
-  if($_SESSION['report_passport']==true){
-    $fit_id = $_SESSION['report_passport'];
+  if($_SESSION['fit_pat_own']==true){
+    $fit_id = $_SESSION['fit_pat_own'];
     $now = time(); // Checking the time now when home page starts.
 
-        if ($now > $_SESSION['expire']) {
-            
-            header('location:log_out.php?i=21');
+        if ($now > $_SESSION['expire_own']) {
+            header('location:log_out.php?i=11');
         }
   }else{
-    header('location:fit_card_login.php');
+    header('location:card_owner_login.php');
   }
 ?>
 <?php
@@ -29,11 +28,18 @@ while($row= mysqli_fetch_array($query)) {
 }
 
 $query_latest_report =  mysqli_query($conn,"select * from reports where fake_id= (SELECT max(fake_id) FROM reports WHERE fit_id='$fit_id')");
-$row_latest= mysqli_fetch_array($query_latest_report);
-$last_time = $row_latest['time'];
-$dt= date_create($last_time);
-$update_date = date_format($dt,'d/m/Y');
-$newDateTime = date('h:i A', strtotime($last_time));
+
+if(mysqli_num_rows($query_latest_report)>0){
+    $q = 1;
+    $row_latest= mysqli_fetch_array($query_latest_report);
+    $last_time = $row_latest['time'];
+    $dt= date_create($last_time);
+    $update_date = date_format($dt,'d/m/Y');
+    $newDateTime = date('h:i A', strtotime($last_time));
+}else{
+    $q = 0;
+}
+
 
 ?>
 
@@ -65,7 +71,22 @@ $newDateTime = date('h:i A', strtotime($last_time));
   <!-- datatable css -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
   <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
- 
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<script>
+function myFunction(id) {
+
+  var r = confirm("Do you really want to delete report?");
+  if (r == true) {
+    window.location.href = "delete_report.php?id="+id;
+  } else {
+
+  }
+}
+</script>
+
+
 </head>
 
 <body>
@@ -79,8 +100,8 @@ $newDateTime = date('h:i A', strtotime($last_time));
         <div class="section-title" data-aos="fade-up">
           <h2>Fit Card</h2>
           <div data-aos="fade-up" data-aos-delay="800">
-            <a href="upload_reports.php" class="btn-get-started scrollto">Upload Reports</a>
-            <a href="log_out.php?i=22" class="btn-get-started scrollto">Log Out</a>
+            <a href="report_upload_own.php" class="btn-get-started scrollto">Upload Reports</a>
+            <a href="log_out.php?i=12" class="btn-get-started scrollto">Log Out</a>
           </div>
         </div>
         
@@ -91,11 +112,10 @@ $newDateTime = date('h:i A', strtotime($last_time));
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <p class="h4"><b>Fit Card ID:</b> <?php echo $fit_id?></p>
-                        <p class="h4"><b>Name:</b> <?php echo $name?></p>
+                        <p class="h4"><b>Hello, <?php echo $name?> your Fit Card ID is:</b> <?php echo $fit_id?></p>
                         <p class="h4"><b>Email:</b> <?php echo $email?></p>
                         <p class="h4"><b>Contact:</b> <?php echo $contact?></p>
-                        <p class="h5"><small class="text-muted">Last updated on <?php echo $update_date;?>, <?php echo $newDateTime;?></small></p>
+                        <p class="h5"><small class="text-muted"><?php if($q == 1){echo 'Last updated on '.$update_date.','.$newDateTime ;}else{echo 'No reports uploaded yet';}?></small></p>
                     </div>
                 </div>
             </div>
@@ -130,7 +150,7 @@ $newDateTime = date('h:i A', strtotime($last_time));
     
         <div style="background-color:#dfe8f7; margin-top:-60px" class="card card-1">
             <div class="card-header">
-                <h3>Reports</h3>
+                <h3>Manage report visibility here</h3>
             </div>
             
             <div class="card-body">
@@ -144,13 +164,15 @@ $newDateTime = date('h:i A', strtotime($last_time));
                             <th>Report Date</th>
                             <th>Uploaded by</th>
                             <th>Report Description</th>
+                            <th>Public Visibility</th>
+                            <th>Delete Report</th>
                             <th>View Report</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php  
 			            $no='1';
-                        $query_report = mysqli_query($conn,"select * from reports where fit_id='$fit_id' and visible='1' ORDER BY report_date DESC");
+                        $query_report = mysqli_query($conn,"select * from reports where fit_id='$fit_id' ORDER BY report_date DESC");
 			
 			            while($row1 = mysqli_fetch_array($query_report)) {
                     ?>  
@@ -161,6 +183,14 @@ $newDateTime = date('h:i A', strtotime($last_time));
                             <td><?php $dt= date_create($row1['report_date']); echo date_format($dt,'d/m/Y'); ?></td>
                             <td><?php echo $row1['uploaded_by']?></td>
                             <td><?php echo $row1['report_description']?></td>
+                            <td><?php if($row1['visible']=='1'){ echo '<a href="visible_off.php?id='.$row1['fake_id'].'"><button type="button" class="btn btn-outline-secondary">Off</button>';}else{echo '<a href="visible_on.php?id='.$row1['fake_id'].'"><button type="button" class="btn btn-outline-primary">On</button>';}?></td>
+                            <td> 
+                                
+                                    <button onclick="myFunction(<?php echo $row1['fake_id']?>)" style="padding: 0;border: none;background: none;color:red">
+                                        <i data-feather="trash-2"></i>
+                                    </button>
+                               
+                            </td>
                             <td>
                                 <a target="_blank" href="<?php echo 'upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
                                     <i data-feather="eye"></i> View
@@ -178,6 +208,8 @@ $newDateTime = date('h:i A', strtotime($last_time));
                             <th>Report Date</th>
                             <th>Uploaded by</th>
                             <th>Report Description</th>
+                            <th>Public Visibility</th>
+                            <th>Delete Report</th>
                             <th>View Report</th>
                         </tr>
                     </tfoot>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2020 at 07:02 PM
+-- Generation Time: Oct 29, 2020 at 05:52 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -28,11 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `fit_card_request` (
-  `fit_id` varchar(200) NOT NULL,
+  `fit_id` int(11) NOT NULL,
   `name` text NOT NULL,
   `email` text NOT NULL,
   `contact` text NOT NULL,
-  `address` text NOT NULL
+  `address` text NOT NULL,
+  `pass` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -44,6 +45,16 @@ CREATE TABLE `fit_card_request` (
 --
 ALTER TABLE `fit_card_request`
   ADD PRIMARY KEY (`fit_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fit_card_request`
+--
+ALTER TABLE `fit_card_request`
+  MODIFY `fit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11223303;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

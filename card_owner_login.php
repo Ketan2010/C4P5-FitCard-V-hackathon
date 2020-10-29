@@ -1,16 +1,3 @@
-<?php
-include('connection/db.php');
-  session_start();
-  if($_SESSION['superhero']==true && $_SESSION['fitid']==true){
-    $otp = $_SESSION['superhero'];
-    $fit_id = $_SESSION['fitid'];
-	
-
-  }else{
-    header('location:index.php');
-  }
-   
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,17 +30,21 @@ include('connection/db.php');
 
         <form method="post">
             <div class="form-group">
-                <label for="otp">Enter OTP</label>
-                <input type="text"  class="form-control" name="otp"  placeholder="Enter 4 digit OTP here" required>
+                <label for="exampleInputEmail1">Fit Card ID</label>
+                <input type="text" class="form-control" name="card_id"  placeholder="Enter 8 digit Fit Card ID here" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Password</label>
+                <input type="password" class="form-control" name="pass"  placeholder="Enter your password here" required>
             </div>
            
           <div data-aos="fade-up" data-aos-delay="800">
-            <input  class="btn-get-started scrollto" id="submit"  name="submit" type="submit" >
+            <input  class="btn-get-started scrollto" id="submit"  name="submit" type="submit" > 
           </div>
         </form> 
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-          <img src="assets/img/lock.png" class="img-fluid animated" alt="">
+          <img src="assets/img/own.png" class="img-fluid animated" alt="">
         </div>
       </div>
     </div>
@@ -74,28 +65,31 @@ include('connection/db.php');
   
 </html>
 <?php
-
+session_start();
 include('connection/db.php');
 if(isset($_POST['submit'])) {
-  $otp_entered = $_POST['otp'];
-  
-  if($otp_entered == $otp)
-  {
-      $_SESSION['report_passport'] = $fit_id;
-      $_SESSION['start'] = time();
-      // Ending a session in 5 minutes from the starting time.
-      $_SESSION['expire'] = $_SESSION['start'] + (5 * 60);
-      header("location:fit_card.php");
-  }else{
-     
-      echo "<script>alert('Invalid OTP Code!, Please try again.')</script>";
-      echo "<script>window.location = 'fit_card_login.php'</script>";
-  }
+  $card_id = $_POST['card_id'];
+  $pass = $_POST['pass'];
+  $query = mysqli_query($conn, "select * from fit_card_request where fit_id ='$card_id' and pass='$pass'");
+  if($query){
+        if(mysqli_num_rows($query)>0){
+            $_SESSION['fit_pat_own'] = $card_id;
+            $_SESSION['start_own'] = time();
+             // Ending a session in 5 minutes from the starting time.
+             $_SESSION['expire_own'] = $_SESSION['start_own'] + (30 * 60);
+             header("location:fit_card_owner.php");
+        } else {
+            echo "<script>alert('invalid Fit Card ID or Password, please try again!')</script>";
+        }
+
+ 
 
 }
-
+}
 
 ?>
 
 
 
+
+?>
