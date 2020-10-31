@@ -1,7 +1,8 @@
 <?php
 include('connection/db.php');
   session_start();
-  if($_SESSION['report_passport']==true){
+  if($_SESSION['report_passport']==true && $_SESSION['doc_mail']==true ){
+    $doc_mail = $_SESSION['doc_mail'];
     $fit_id = $_SESSION['report_passport'];
     $now = time(); // Checking the time now when home page starts.
 
@@ -11,6 +12,21 @@ include('connection/db.php');
   }else{
     header('location:fit_card_login.php');
   }
+?>
+<?php
+include('connection/db.php');
+
+$query_doc =  mysqli_query($conn,"select * from  doctor where doc_mail= '$doc_mail'");
+while($row_doc = mysqli_fetch_array($query_doc)) {
+  $doc_name = $row_doc['doc_name'];
+  $doc_mail = $row_doc['doc_mail'];
+  $doc_contact = $row_doc['doc_contact'];
+  $category = $row_doc['category'];
+
+  
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +115,7 @@ include('connection/db.php');
                             </div>
                             <div class="col">
                                 <label for="uploaded_by">Your Name</label>
-                                <input type="text" class="form-control" name="uploaded_by" id="uploaded_by" placeholder="your name" required>    
+                                <input type="text" value="<?php echo $doc_name?>" class="form-control" name="uploaded_by" id="uploaded_by" placeholder="your name" required readonly>    
                             </div>    
                         </div>
                         <div class="form-group">

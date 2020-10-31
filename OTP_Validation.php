@@ -1,7 +1,8 @@
 <?php
 include('connection/db.php');
   session_start();
-  if($_SESSION['superhero']==true && $_SESSION['fitid']==true){
+  if($_SESSION['superhero']==true && $_SESSION['fitid']==true && $_SESSION['doc_mail']==true ){
+    $doc_mail = $_SESSION['doc_mail'];
     $otp = $_SESSION['superhero'];
     $fit_id = $_SESSION['fitid'];
 	
@@ -10,6 +11,16 @@ include('connection/db.php');
     header('location:index.php');
   }
    
+?>
+<?php
+
+include('connection/db.php');
+
+$query =  mysqli_query($conn,"select * from  doctor where doc_mail= '$doc_mail'");
+while($row= mysqli_fetch_array($query)) {
+  $doc_name = $row['doc_name'];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +54,7 @@ include('connection/db.php');
 
         <form method="post">
             <div class="form-group">
-                <label for="otp">Enter OTP</label>
+                <label for="otp">Hi, <?php echo $doc_name?> Enter OTP</label>
                 <input type="text"  class="form-control" name="otp"  placeholder="Enter 4 digit OTP here" required>
             </div>
            
@@ -84,7 +95,7 @@ if(isset($_POST['submit'])) {
       $_SESSION['report_passport'] = $fit_id;
       $_SESSION['start'] = time();
       // Ending a session in 5 minutes from the starting time.
-      $_SESSION['expire'] = $_SESSION['start'] + (5 * 60);
+      $_SESSION['expire'] = $_SESSION['start'] + (30 * 60);
       header("location:fit_card.php");
   }else{
      

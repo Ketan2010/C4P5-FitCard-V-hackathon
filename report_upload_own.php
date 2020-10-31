@@ -173,7 +173,7 @@ if(isset($_POST['submit']))
       $row = mysqli_fetch_array($query);
       $to = $row['email'];
       $subject =  'Report uploaded on Fit Card';
-      $body = nl2br("Hello " . $row["name"]. ", ".$uploaded_by." has uploaded the ".$report_name." in your Fit Card.");
+      $body = nl2br("Hello " . $row["name"]. ", You have successfuly uploaded the ".$report_name." in your Fit Card.");
       require("PHPMailer/src/PHPMailer.php");
       require("PHPMailer/src/SMTP.php");
       require("PHPMailer/src/Exception.php");  

@@ -1,3 +1,14 @@
+<?php
+// include('connection/db.php');
+//   session_start();
+//   if($_SESSION['doc_mail']==true){
+//     $doc_mail = $_SESSION['doc_mail'];
+    
+//   }else{
+//     header('location:doc_login.php');
+//   }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,6 +81,7 @@ if(isset($_POST['submit'])) {
   $query = mysqli_query($conn, "select * from fit_card_request where fit_id=$card_id");
   if($query){
   if(mysqli_num_rows($query)>0){
+   
     echo "<script>window.location.href  = 'send_otp.php?fcid=$card_id';</script>";
 
 
@@ -85,4 +97,3 @@ if(isset($_POST['submit'])) {
 
 
 
-?>

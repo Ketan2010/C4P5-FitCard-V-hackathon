@@ -1,5 +1,21 @@
 <?php
 include('connection/db.php');
+  session_start();
+  if($_SESSION['doc_mail']==true){
+    $doc_mail = $_SESSION['doc_mail'];
+    
+  }else{
+    header('location:doc_login.php');
+  }
+?>
+
+<?php
+include('connection/db.php');
+
+$query =  mysqli_query($conn,"select * from  doctor where doc_mail= '$doc_mail'");
+while($row= mysqli_fetch_array($query)) {
+  $doc_name = $row['doc_name'];
+}
 session_start();
 if(isset($_GET["fcid"])){
     $fit_id=$_GET["fcid"];
@@ -20,7 +36,7 @@ if(isset($_GET["fcid"])){
     $test = "0";  //keep this as it is
     $sender = "TXTLCL"; // This is who the message appears to be from.
     $numbers = "$contact"; // A single number or a comma-seperated list of numbers
-    $message = "Hello,".$name." This is your Fit Card OTP : ".$otp;   //message which is to be displayed in the sms
+    $message = "Hello,".$name." Hi, ".$doc_name." need to access your fit card, This is your Fit Card OTP : ".$otp;   //message which is to be displayed in the sms
     $message = urlencode($message);
     $username = 'zeelmehta19.zm@gmail.com';
     $data = "username=".$username."&hash=".$hash."&message=".$message."&sender=".$sender."&numbers=".$numbers."&test=".$test;
@@ -45,7 +61,7 @@ if(isset($_GET["fcid"])){
         $mail->setFrom('admin@example.com');
         $mail->addAddress($pat_mail);
         $mail->Subject = 'Fit Card Verification Code';
-        $mail->Body = 'Hello,'.$name.' Your Fit Card verification code is :'.$otp;
+        $mail->Body = 'Hello,'.$name.'. '.$doc_name.' Want to access your Fit Card; verification code is :'.$otp;
         $mail->IsSMTP();
         $mail->SMTPSecure = 'ssl';
         $mail->Host = 'ssl://smtp.gmail.com';

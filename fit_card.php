@@ -1,8 +1,10 @@
 <?php
 include('connection/db.php');
   session_start();
-  if($_SESSION['report_passport']==true){
-    $fit_id = $_SESSION['report_passport'];
+  if($_SESSION['report_passport']==true && $_SESSION['doc_mail']==true ){
+    $doc_mail = $_SESSION['doc_mail'];
+        $fit_id = $_SESSION['report_passport'];
+
     $now = time(); // Checking the time now when home page starts.
 
         if ($now > $_SESSION['expire']) {
@@ -15,12 +17,18 @@ include('connection/db.php');
 ?>
 <?php
 include('connection/db.php');
-if(isset($_GET['i'])){
-    $display='Registration successful !!! Thanks for registration , you will get your fit card soon .Till then you can use ' .  $fit_id .' as your fit card id.' ;
-    echo "<script>alert( ' $display' )</script>";
 
 
+$query_doc =  mysqli_query($conn,"select * from  doctor where doc_mail= '$doc_mail'");
+while($row_doc = mysqli_fetch_array($query_doc)) {
+  $doc_name = $row_doc['doc_name'];
+  $doc_mail = $row_doc['doc_mail'];
+  $doc_contact = $row_doc['doc_contact'];
+  $category = $row_doc['category'];
+
+  
 }
+
 $query =  mysqli_query($conn,"select * from  fit_card_request where fit_id= '$fit_id'");
 while($row= mysqli_fetch_array($query)) {
   $name = $row['name'];
@@ -79,7 +87,7 @@ $newDateTime = date('h:i A', strtotime($last_time));
         <div class="section-title" data-aos="fade-up">
           <h2>Fit Card</h2>
           <div data-aos="fade-up" data-aos-delay="800">
-            <a href="upload_reports.php" class="btn-get-started scrollto">Upload Reports</a>
+          <?php if($category == 'Doctor' or $category == 'laboratory' ){echo '<a href="upload_reports.php" class="btn-get-started scrollto">Upload Reports</a>';} else{echo '';} ?>
             <a href="log_out.php?i=22" class="btn-get-started scrollto">Log Out</a>
           </div>
         </div>
@@ -106,87 +114,12 @@ $newDateTime = date('h:i A', strtotime($last_time));
 
   </section><!-- End Hero -->
   
+  <?php 
+  if($category=='Doctor' or $category=='Farmacist'){
+    include('report_records.php');
+  }
+  ?>
 
-<!-- ======= symptoms Section ======= -->
-<!-- <section id="features" class="features">
-    <div class="container">
-    
-        <div style="background-color:#dfe8f7; margin-top:-60px" class="card card-1">
-            <div class="card-header">
-                <h3>Sign and Symptomps</h3>
-            </div>
-            
-            <div class="card-body">  
-            </div>
-        </div>
-        
-    </div>
-    </section> -->
-    <!-- End symptoms Section -->
-
-    <!-- ======= reports Section ======= -->
-    <section id="features" class="features">
-    <div class="container">
-    
-        <div style="background-color:#dfe8f7; margin-top:-60px" class="card card-1">
-            <div class="card-header">
-                <h3>Reports</h3>
-            </div>
-            
-            <div class="card-body">
-                
-                <table id="example" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Sr.No</th>
-                            <th>Category</th>
-                            <th>Report Name</th>
-                            <th>Report Date</th>
-                            <th>Uploaded by</th>
-                            <th>Report Description</th>
-                            <th>View Report</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php  
-			            $no='1';
-                        $query_report = mysqli_query($conn,"select * from reports where fit_id='$fit_id' and visible='1' ORDER BY report_date DESC");
-			
-			            while($row1 = mysqli_fetch_array($query_report)) {
-                    ?>  
-                        <tr>
-                            <td><?php echo $no ?></td>
-                            <td><?php echo $row1['report_categry']?></td>
-                            <td><?php echo $row1['report_name']?></td>
-                            <td><?php $dt= date_create($row1['report_date']); echo date_format($dt,'d/m/Y'); ?></td>
-                            <td><?php echo $row1['uploaded_by']?></td>
-                            <td><?php echo $row1['report_description']?></td>
-                            <td>
-                                <a target="_blank" href="<?php echo 'upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
-                                    <i data-feather="eye"></i> View
-                                </button>
-                            </td>
-                        </tr>
-                        <?php $no=$no+1;  } ?>
-                       
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Sr.No</th>
-                            <th>Category</th>
-                            <th>Report Name</th>
-                            <th>Report Date</th>
-                            <th>Uploaded by</th>
-                            <th>Report Description</th>
-                            <th>View Report</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-        
-    </div>
-    </section><!-- End reports Section -->
     
     
 

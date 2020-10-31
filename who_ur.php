@@ -27,18 +27,18 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <a data-aos="fade-up" href=""><img style="height:15rem; width:23rem" src="assets/img/card1.png"  class="img-fluid"></a>
+          <a data-aos="fade-up" href=""><img style="height:20rem; width:23rem" src="assets/img/pat.png"  class="img-fluid"></a>
           <br>
           <div data-aos="fade-up" data-aos-delay="800">
-            <a href="get_fit_card.php" class="btn-get-started scrollto">Get yours</a>
+            <a href="card_owner_login.php" class="btn-get-started scrollto">Card Owner</a>
           </div>
         </div>
 
         <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <a data-aos="fade-up" href=""><img style="height:15rem; width:18rem" src="assets/img/hp.png"  class="img-fluid"></a>
+          <a data-aos="fade-up" href=""><img style="height:20rem; width:18rem" src="assets/img/doc.png"  class="img-fluid"></a>
           <br>
           <div data-aos="fade-up" data-aos-delay="800">
-            <a href="who_ur.php" class="btn-get-started scrollto">Login to Fit Card</a>
+            <a href="doc_login.php" class="btn-get-started scrollto">Doctor/Pharmacist/Laboratory</a>
           </div>
         </div>
         

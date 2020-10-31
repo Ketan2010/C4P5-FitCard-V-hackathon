@@ -1,3 +1,30 @@
+<?php
+session_start();
+include('connection/db.php');
+if(isset($_POST['submit'])) {
+  $doc_mail = $_POST['doc_mail'];
+  $doc_pass = $_POST['doc_pass'];
+  $query = mysqli_query($conn, "");
+  if($query){
+        if(mysqli_num_rows($query)>0){
+            $_SESSION['doc_mail'] = $doc_mail;
+             header("location:doctor_side.php");
+             
+        } else {
+            echo "<script>alert('invalid Fit Mail ID or Password, please try again!')</script>";
+        }
+
+ 
+
+}
+}
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,12 +57,12 @@
 
         <form method="post">
             <div class="form-group">
-                <label for="exampleInputEmail1">Fit Card ID</label>
-                <input type="text" class="form-control" name="card_id"  placeholder="Enter 8 digit Fit Card ID here" required>
+                <label for="exampleInputEmail1">Mail ID</label>
+                <input type="text" class="form-control" name="doc_mail"  placeholder="Enter your mail ID here" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Password</label>
-                <input type="password" class="form-control" name="pass"  placeholder="Enter your password here" required>
+                <input type="password" class="form-control" name="doc_pass"  placeholder="Enter your password here" required>
             </div>
             
            
@@ -43,10 +70,12 @@
             <input  class="btn-get-started scrollto" id="submit"  name="submit" type="submit" > 
 
           </div>
+          <h1 style="font-size:15px" >Do not have Account? <a href="doc_register.php">Register Here</a></h1>
+
         </form> 
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-          <img src="assets/img/pat.png" class="img-fluid animated" alt="">
+          <img src="assets/img/doc.png" class="img-fluid animated" alt="">
         </div>
       </div>
 
@@ -67,33 +96,4 @@
 </body>
   
 </html>
-<?php
-error_reporting(E_ERROR | E_PARSE);
-session_start();
-include('connection/db.php');
-if(isset($_POST['submit'])) {
-  $card_id = $_POST['card_id'];
-  $pass = $_POST['pass'];
-  $query = mysqli_query($conn, "select * from fit_card_request where fit_id ='$card_id' and pass='$pass'");
-  if($query){
-        if(mysqli_num_rows($query)>0){
-            $_SESSION['fit_pat_own'] = $card_id;
-            $_SESSION['start_own'] = time();
-             // Ending a session in 5 minutes from the starting time.
-             $_SESSION['expire_own'] = $_SESSION['start_own'] + (30 * 60);
-             header("location:fit_card_owner.php");
-             
-        } else {
-            echo "<script>alert('invalid Fit Card ID or Password, please try again!')</script>";
-        }
-
- 
-
-}
-}
-
-?>
-
-
-
 
