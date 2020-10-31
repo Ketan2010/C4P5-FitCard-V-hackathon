@@ -4,7 +4,7 @@ include('connection/db.php');
 if(isset($_POST['submit'])) {
   $doc_mail = $_POST['doc_mail'];
   $doc_pass = $_POST['doc_pass'];
-  $query = mysqli_query($conn, "");
+  $query = mysqli_query($conn, "select * from doctor where doc_mail='$doc_mail' and doc_pass='$doc_pass' ");
   if($query){
         if(mysqli_num_rows($query)>0){
             $_SESSION['doc_mail'] = $doc_mail;
