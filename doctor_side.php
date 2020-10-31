@@ -65,7 +65,7 @@ while($row= mysqli_fetch_array($query)) {
 
     <div class="container">
         <div class="section-title" data-aos="fade-up">
-          <h2>Doctor Profile</h2>
+          <h2>Your Profile</h2>
           <div data-aos="fade-up" data-aos-delay="800">
             <a href="fit_card_login.php" class="btn-get-started scrollto">Fit Card</a>
             <a href="log_out.php?i=33" class="btn-get-started scrollto">Log Out</a>

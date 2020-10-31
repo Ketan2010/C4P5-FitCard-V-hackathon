@@ -98,7 +98,7 @@ if(isset($_POST['submit'])) {
                                     <option value="">Select</option>
                                     <option value="Doctor">Doctor</option>
                                     <option value="laboratory">laboratory</option>
-                                    <option value="Farmacist">Pharmacist</option>
+                                    <option value="Pharmacist">Pharmacist</option>
                                   </select>
             </div>
             <div class="form-group">

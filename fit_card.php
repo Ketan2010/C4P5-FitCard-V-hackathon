@@ -5,7 +5,7 @@ include('connection/db.php');
     $doc_mail = $_SESSION['doc_mail'];
         $fit_id = $_SESSION['report_passport'];
 
-    $now = time(); // Checking the time now when home page starts.
+        $now = time(); // Checking the time now when home page starts.
 
         if ($now > $_SESSION['expire']) {
             
@@ -37,11 +37,17 @@ while($row= mysqli_fetch_array($query)) {
 }
 
 $query_latest_report =  mysqli_query($conn,"select * from reports where fake_id= (SELECT max(fake_id) FROM reports WHERE fit_id='$fit_id')");
-$row_latest= mysqli_fetch_array($query_latest_report);
-$last_time = $row_latest['time'];
-$dt= date_create($last_time);
-$update_date = date_format($dt,'d/m/Y');
-$newDateTime = date('h:i A', strtotime($last_time));
+
+if(mysqli_num_rows($query_latest_report)>0){
+    $q = 1;
+    $row_latest= mysqli_fetch_array($query_latest_report);
+    $last_time = $row_latest['time'];
+    $dt= date_create($last_time);
+    $update_date = date_format($dt,'d/m/Y');
+    $newDateTime = date('h:i A', strtotime($last_time));
+}else{
+    $q = 0;
+}
 
 ?>
 
@@ -103,7 +109,7 @@ $newDateTime = date('h:i A', strtotime($last_time));
                         <p class="h4"><b>Name:</b> <?php echo $name?></p>
                         <p class="h4"><b>Email:</b> <?php echo $email?></p>
                         <p class="h4"><b>Contact:</b> <?php echo $contact?></p>
-                        <p class="h5"><small class="text-muted">Last updated on <?php echo $update_date;?>, <?php echo $newDateTime;?></small></p>
+                        <p class="h5"><small class="text-muted"><?php if($q == 1){echo 'Last updated on '.$update_date.','.$newDateTime ;}else{echo 'No reports uploaded yet';}?></small></p>
                     </div>
                 </div>
             </div>

@@ -9,13 +9,9 @@ if(isset($_POST['submit'])) {
         if(mysqli_num_rows($query)>0){
             $_SESSION['doc_mail'] = $doc_mail;
              header("location:doctor_side.php");
-             
         } else {
             echo "<script>alert('invalid Fit Mail ID or Password, please try again!')</script>";
         }
-
- 
-
 }
 }
 
