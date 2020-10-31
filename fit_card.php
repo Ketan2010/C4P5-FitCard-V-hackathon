@@ -115,7 +115,7 @@ $newDateTime = date('h:i A', strtotime($last_time));
   </section><!-- End Hero -->
   
   <?php 
-  if($category=='Doctor' or $category=='Farmacist'){
+  if($category=='Doctor' or $category=='Pharmacist'){
     include('report_records.php');
   }
   ?>
