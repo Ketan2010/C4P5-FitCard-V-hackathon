@@ -158,6 +158,19 @@ while($row_doc = mysqli_fetch_array($query_doc)) {
 <?php
 include('connection/db.php');
 
+
+function my_encrypt($data, $key) {
+  // Remove the base64 encoding from our key
+  $encryption_key = base64_decode($key);
+  // Generate an initialization vector
+  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+  // Encrypt the data using AES 256 encryption in CBC mode using our encryption key and initialization vector.
+  $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
+  // The $iv is just as important as the key for decrypting, so save it with our encrypted data using a unique separator (::)
+  return base64_encode($encrypted . '::' . $iv);
+}
+
+
 if(isset($_POST['submit']))
 {
     $report_name = $_POST['report_name'];
@@ -166,6 +179,7 @@ if(isset($_POST['submit']))
     $uploaded_by = $_POST['uploaded_by'];
     $report_description = $_POST['report_description'];
     $report_file = $_FILES['report_file'];
+
     $upload_report_file = $_FILES['report_file']['name'];
     $file = "upload/$fit_id";
     if(!is_dir($file)) 
@@ -173,6 +187,14 @@ if(isset($_POST['submit']))
       mkdir("upload/$fit_id");
     }
     move_uploaded_file($_FILES['report_file']['tmp_name'],"upload/$fit_id/".$_FILES['report_file']['name']);
+
+    $msg = file_get_contents("upload/$fit_id/".$_FILES['report_file']['name']);
+    $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
+    $msg_encrypted = my_encrypt($msg, $key);
+    $file = fopen("upload/$fit_id/".$_FILES['report_file']['name'], 'wb');
+    fwrite($file, $msg_encrypted);
+    fclose($file);
+
     $query = mysqli_query($conn,"INSERT INTO reports(report_name, report_date, uploaded_by, report_description, report_file,  fit_id, report_categry)values('$report_name', '$report_date', '$uploaded_by', '$report_description', '".$upload_report_file."' , '$fit_id', '$report_categry')");
     if($query)
     {

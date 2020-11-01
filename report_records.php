@@ -37,7 +37,7 @@
                             <td><?php echo $row1['uploaded_by']?></td>
                             <td><?php echo $row1['report_description']?></td>
                             <td>
-                                <a target="_blank" href="<?php echo 'upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
+                            <a href="<?php $path = "upload/".$fit_id."/". $row1['report_file']; echo 'dec.php?i=1 && path=upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
                                     <i data-feather="eye"></i> View
                                 </button>
                             </td>

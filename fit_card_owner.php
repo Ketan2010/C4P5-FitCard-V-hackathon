@@ -73,7 +73,16 @@ if(mysqli_num_rows($query_latest_report)>0){
   <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
   <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js">
+</script>
+<script type="text/javascript">
+ $(document).ready(function() {
+     if ($.cookie('bob') == null) {
+         $('#exampleModal').modal('show');
+         $.cookie('bob', '1');
+     }
+ });
+</script>
 <script>
 function myFunction(id) {
 
@@ -125,7 +134,24 @@ function myFunction(id) {
     
 
   </section><!-- End Hero -->
-  
+  <div class="modal" id="exampleModal"  tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ads</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <img style="height:220px ;width: 468px" src="assets/img/ad.jpg" alt="" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ======= symptoms Section ======= -->
 <!-- <section id="features" class="features">
@@ -173,7 +199,15 @@ function myFunction(id) {
                     <?php  
 			            $no='1';
                         $query_report = mysqli_query($conn,"select * from reports where fit_id='$fit_id' ORDER BY report_date DESC");
-			
+                        function my_decrypt($data, $key) {
+                          // Remove the base64 encoding from our key
+                          $encryption_key = base64_decode($key);
+                          // To decrypt, split the encrypted data from our IV - our unique separator used was "::"
+                          list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
+                          return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
+                      }
+                     
+
 			            while($row1 = mysqli_fetch_array($query_report)) {
                     ?>  
                         <tr>
@@ -192,17 +226,21 @@ function myFunction(id) {
                                
                             </td>
                             <td>
-                                <a target="_blank" href="<?php echo 'upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
+                                <a href="<?php $path = "upload/".$fit_id."/". $row1['report_file']; echo 'dec.php?path=upload/'.$fit_id.'/'. $row1['report_file'];?>" ><button  class="btn btn-primary">
                                     <i data-feather="eye"></i> View
                                 </button>
+
                             </td>
                         </tr>
-                        <?php $no=$no+1;  } ?>
+                        
+                        <?php 
+                      
+                        $no=$no+1;  } ?>
                        
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Sr.No</th>
+                             <th>Sr.No</th>
                             <th>Category</th>
                             <th>Report Name</th>
                             <th>Report Date</th>
@@ -220,6 +258,19 @@ function myFunction(id) {
     </div>
     </section><!-- End reports Section -->
     
+
+
+
+
+
+
+   
+
+
+
+
+
+
     
 
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>

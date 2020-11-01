@@ -10,7 +10,7 @@ if(isset($_POST['submit'])) {
             $_SESSION['doc_mail'] = $doc_mail;
              header("location:doctor_side.php");
         } else {
-            echo "<script>alert('invalid Fit Mail ID or Password, please try again!')</script>";
+            echo "<script>alert('invalid Mail ID or Password, please try again!')</script>";
         }
 }
 }

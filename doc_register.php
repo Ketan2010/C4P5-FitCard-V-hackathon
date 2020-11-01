@@ -121,7 +121,7 @@ if(isset($_POST['submit'])) {
             <input  class="btn-get-started scrollto" id="submit"  name="submit" type="submit" > 
 
           </div>
-          <h1 style="font-size:15px" >Do not have Account? <a href="doc_register.php">Register Here</a></h1>
+          <h1 style="font-size:15px" >Do not have Account? <a href="doc_login.php">Login Here</a></h1>
 
         </form> 
         </div>

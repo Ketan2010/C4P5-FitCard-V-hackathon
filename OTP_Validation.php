@@ -95,7 +95,7 @@ if(isset($_POST['submit'])) {
       $_SESSION['report_passport'] = $fit_id;
       $_SESSION['start'] = time();
       // Ending a session in 5 minutes from the starting time.
-      $_SESSION['expire'] = $_SESSION['start'] + (5 * 60);
+      $_SESSION['expire'] = $_SESSION['start'] + (30 * 60);
       header("location:fit_card.php");
   }else{
      
