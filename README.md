@@ -12,7 +12,7 @@ A card with barcode and unique code to carry while consulting doctors. On passwo
 * Authentication
 * Report Encryption
 
-![home](https://github.com/Ketan2010/C4P5-FitCard-V-hackathon/blob/main/assets/img/fitcard.png?raw=true) <br>
+![home](https://github.com/Ketan2010/C4P5-FitCard-V-hackathon/blob/main/assets/img/fitme.png?raw=true) <br>
 
 ## Technology Stack
 * Front End: HTML, CSS, Bootsrap, Datatables, Javascript
